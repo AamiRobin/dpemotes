@@ -35,18 +35,6 @@ function ShowNotification(text)
     end
 end
 
--- Clear all the animal emotes if disabled.
-if not Config.AnimalEmotesEnabled then
-    RP.AnimalEmotes = {}
-    for k, v in pairs(RP) do
-        for i, j in pairs(v) do
-            if j.AnimalEmote then
-                RP[k][i] = nil
-            end
-        end
-    end
-end
-
 local EmoteTable = {}
 local FavEmoteTable = {}
 local KeyEmoteTable = {}
@@ -70,7 +58,7 @@ if Config.FavKeybindEnabled then
         if not IsPedSittingInAnyVehicle(PlayerPedId()) then
             if FavoriteEmote ~= "" and (not CanUseFavKeyBind or CanUseFavKeyBind()) then
                 EmoteCommandStart(nil, { FavoriteEmote, 0 })
-                Wait(3000)
+                Wait(500)
             end
         end
         doingFavoriteEmote = false
@@ -480,13 +468,18 @@ function AddFaceMenu(menu)
 end
 
 function AddInfoMenu(menu)
-    if not UpdateAvailable then
+    -- TODO: Add a way to check if there is an update available.
+    -- This got broken with the Update refactor of the name change and
+    -- at the time I'm fixing this, I couldn't test anything in game so
+    -- I won't introduce any breaking changes - AvaN0x
+
+    -- if not UpdateAvailable then
         infomenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['infoupdate'], "Huge Thank You ❤️", "",
             Menuthing, Menuthing)
-    else
-        infomenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['infoupdateav'],
-            Config.Languages[lang]['infoupdateavtext'], "", Menuthing, Menuthing)
-    end
+    -- else
+    --     infomenu = _menuPool:AddSubMenu(menu, Config.Languages[lang]['infoupdateav'],
+    --         Config.Languages[lang]['infoupdateavtext'], "", Menuthing, Menuthing)
+    -- end
     infomenu:AddItem(NativeUI.CreateItem(Config.Languages[lang]['suggestions'],
         Config.Languages[lang]['suggestionsinfo'
         ]))
@@ -554,6 +547,7 @@ end
 if Config.ExpressionsEnabled then
     AddFaceMenu(mainMenu)
 end
+AddInfoMenu(mainMenu)
 
 _menuPool:RefreshIndex()
 

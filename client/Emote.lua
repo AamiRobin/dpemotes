@@ -21,6 +21,28 @@ local AnimationThreadStatus = false
 local CanCancel = true
 local Pointing = false
 
+
+-- Remove emotes if needed
+
+local emoteTypes = {
+    "Shared",
+    "Dances",
+    "AnimalEmotes",
+    "Emotes",
+    "PropEmotes",
+}
+
+for i = 1, #emoteTypes do
+    local emoteType = emoteTypes[i]
+    for emoteName, emoteData in pairs(RP[emoteType]) do
+        local shouldRemove = false
+        if Config.AdultEmotesDisabled and emoteData.AdultAnimation then shouldRemove = true end
+        if not Config.AnimalEmotesEnabled and emoteData.AnimalEmote then shouldRemove = true end
+        if emoteData[1] and not ((emoteData[1] == 'Scenario') or (emoteData[1] == 'ScenarioObject') or (emoteData[1] == 'MaleScenario')) and not DoesAnimDictExist(emoteData[1]) then shouldRemove = true end
+        if shouldRemove then RP[emoteType][emoteName] = nil end
+    end
+end
+
 local function RunAnimationThread()
     if AnimationThreadStatus then return end
     AnimationThreadStatus = true
@@ -625,7 +647,7 @@ function OnEmotePlay(EmoteName, textureVariation)
         end
     end
 
-    TaskPlayAnim(PlayerPedId(), ChosenDict, ChosenAnimation, 2.0, 2.0, AnimationDuration, MovementType, 0, false, false,
+    TaskPlayAnim(PlayerPedId(), ChosenDict, ChosenAnimation, 5.0, 5.0, AnimationDuration, MovementType, 0, false, false,
         false)
     RemoveAnimDict(ChosenDict)
     IsInAnimation = true
