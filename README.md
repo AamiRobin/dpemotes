@@ -46,11 +46,15 @@ RpEmotes is a community driven FiveM emote menu allowing players to express them
 
 * Norwegian 🇳🇴
 
+* Persian 🇮🇷
+
 * Polish 🇵🇱
 
 * Romanian 🇷🇴
 
 * Russian 🇷🇺
+
+* Sinhala 🇱🇰
 
 * Spanish 🇪🇸
 
@@ -68,6 +72,8 @@ Languages can be selected and / or added in the config.lua.
 
 # Features 🛠️
 
+- Multiple Translations 🌏
+
 - Search Function 🔎
 
 - Custom Animations with **permission from the community** 🏃
@@ -79,6 +85,10 @@ Languages can be selected and / or added in the config.lua.
 - Shared Dances 🕺💃
 
 - Persistent Walkstyles via client KVP 🚶‍♂️
+
+- Crouching 
+
+- Crawling 
 
 - Shared Particle Effects 💨
 
@@ -94,12 +104,22 @@ Languages can be selected and / or added in the config.lua.
 
 - Easy To Understand Configuration File ⚙️
 
-- Standalone exports to play anim, cancel anim and block (or not) the cancel key
+- Exit Emotes 😎
+
+- Standalone exports
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Exports
 
 ```lua
 exports["rpemotes"]:EmoteCommandStart(emoteName, textureVariation)
 exports["rpemotes"]:EmoteCancel(forceCancel) – forceCancel is optional
 exports["rpemotes"]:CanCancelEmote(state)
+exports["rpemotes"]:IsPlayerCrouched()
+exports["rpemotes"]:IsPlayerProne()
+exports["rpemotes"]:IsPlayerCrawling()
+exports["rpemotes"]:IsPlayerPointing()
 ```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +151,7 @@ SqlKeybinding = false,
 
 If you do not want to use the SQL features keep the `oxmysql` region in fxmanifest.lua commented out.
 
-Alternatively, you can use the keybind command that comes with FiveM without having to use SQL, by entering the following into F8: 
+Alternatively, you can use the keybind command that comes with FiveM without having to use SQL, by entering the following into F8:
 
 `bind keyboard "Yourbutton" "e youremote"`. To remove the keybind, type `"unbind keyboard "Yourbutton"`.
 
@@ -152,6 +172,71 @@ Much like the menu key, `RagdollKeybind` is also using RegisterKeyMapping. It is
 Once enabled, players can press `B` on the keyboard to enable standalone finger pointing, and `H` to put their hands up, without the need for unnecessary frameworks or "small resources".
 
 Much like everything else in the menu, server owners can change these keybinds to their own preferences.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Crouching & Crawling
+
+**Crawling:**
+
+Server owners can opt in to either overriding the stealth/action animation when pressing the LEFT CONTROL keybind or have players tap LEFT CONTROL twice to switch from stealth to crouch (when enabled in the config.lua file)
+
+
+**Crouching:**
+
+RIGHT CONTROL. Players can move forward, back, left and right as well as turning around. Press SPACEBAR to switch from stomach to back. Pressing RIGHT CONTROL key while running will have the player "dive into" a crouching animation.
+
+# Chat Commands
+
+/crouch
+
+/crawl
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Favorite Emote
+
+Players can search for an emote (so long as search is enabled) and press LEFT SHIFT and CAPLOCKS on their keyboard to add it to their 'Favorites'. Pressing CAPLOCKS will toggle the emote.
+
+Alternatively, you can use the 🌟 Favorite menu to find an emote and press enter.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Exit Emotes
+
+Exit Emotes are used to make cancelling an animation more smoother and dynamic, such as getting up off a chair or throwing a cigarette out instead of dropping it.
+
+You can add your own Exit Emotes under `AnimationListCustom.lua`'s new `CustomDP.Exits = {}` array.
+
+Below is an example of how this would look:
+
+```lua
+    },
+    ["sit"] = {
+        "anim@amb@business@bgen@bgen_no_work@",
+        "sit_phone_phoneputdown_idle_nowork",
+        "Sit",
+        AnimationOptions = {
+            EmoteLoop = true,
+            ExitEmote = "getup",
+            ExitEmoteType = "Exits"
+        }
+    },
+```
+
+The ExitEmote calls for the 'getup' emote, which is noted as the following:
+
+```lua
+["getup"] = {
+        "get_up@sat_on_floor@to_stand",
+        "getup_0",
+        "Get Up",
+        AnimationOptions = {
+            EmoteDuration = 2000
+        }
+    }
+}
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -209,15 +294,25 @@ Framework = false,
 
 * [Enforce gamebuild to latest build](https://forum.cfx.re/t/tutorial-forcing-gamebuild-to-casino-cayo-perico-or-tuners-update/4784977) for all emotes and props to work as intended.
 
-**Onesync is required for the particle effects to work as intended**
+**Onesync Infinity is required for the particle effects to work as intended** This can be done via txadmin or your localhost .bat file.**
 
-* Set the desired language and settings in the config.lua
+For localhost servers, comment out onesync from your server.cfg and add the following to your `.bat` file:
+
+```lua
+
++set onesync on +set onesync_enableInfinity 1 +set onesync_enableBeyond 1 +set onesync_population true
+
+```
+
+You can put this before your gamebuild enforcement, aka `+set sv_enforceGameBuild XXXX`
+
+* Set the desired language and settings in the config.lua under `MenuLanguage = 'en',`
 
 * Qb-Core server owners, set `Framework = 'qb-core'` in the config file, otherwise leave it as false.
 
 * To use the SQL features, install the [oxmysql](https://github.com/overextended/oxmysql) resource then open `keybinds.lua` in RPEmotes. If you do not want to use the SQL features, comment out the `oxmysql` region in fxmanifest.lua.
 
-Alternatively, you can use the keybind command that comes with FiveM without having the SQL, by entering the following into F8: 
+Alternatively, you can use the keybind command that comes with FiveM without having the SQL, by entering the following into F8:
 
 `bind keyboard "Yourbutton" "e youremote"`. To remove the keybind, type `"unbind keyboard "Yourbutton"`.
 
@@ -257,6 +352,8 @@ Understandably, this can be confusing for some people. We suggest using the `Att
 
 # Particle Effects 💨
 
+**REQUIRES ONESYNC INFINITY**
+
 Particle effects can be found using the [DurtyFree GTA V Dump](https://github.com/DurtyFree/gta-v-data-dumps/blob/master/particleEffectsCompact.json). You will need to add the particle assest, name, and placement. Placement is done via XYZ, Pitch, Roll, Yaw, and scale.
 
 Onesync is required for them to work across all clients.
@@ -280,9 +377,11 @@ PtfxPlacement = {
 
 By default, the main prop will share it's coordinates with the particle effect, so just put 0.0 for the particle effects and you will be good to go.
 
-If no prop is uses in the animation or you require the particle effect to be in a different location, use `PtfxNoProp = true`, and 0.0 will 9/10 times be the human peds' stomach; you can then offset your coordinates based on that with the first 3 entries being XYZ, and the last 3 being rotation XYZ. 
+If no prop is used in the animation or you require the particle effect to be in a different location, use `PtfxNoProp = true`, and 0.0 will 9/10 times be the human peds' stomach; you can then offset your coordinates based on that with the first 3 entries being XYZ, and the last 3 being rotation XYZ.
 
-Using Menyoo, spawn down a tennis ball and attach it to human, by default menyoo will attach it to the SKEL_ROOT bone (stomach), so from that, what we can do is offset the coordinates, say, up to the human ped's mouth, and then once we've got it correct, we can transfer those coordinates over to rpemotes, and tah dah, we have our Ptfx Placement.
+Alternatively, you can use the `PtfxBone =` AnimationOption to attach the PTFX to the ped's bone, simiarly to how you attach props.
+
+Using Menyoo, spawn down a tennis ball and attach it to human, by default menyoo will attach it to the SKEL_ROOT bone (stomach), so from that, what we can do is is either offset the coordinates, say, up to the human ped's mouth, or change the bone all together. Once we've got it correct, we can transfer those coordinates over to rpemotes, and tah dah, we have our Ptfx Placement.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -292,7 +391,7 @@ Because the menu gets updated frequently, the files get overwritten. To avoid th
 
 Add your animation code to the `AnimationListCustom.lua` and make a backup of this file, call it `BackUpAnimationListCustom.lua`.
 
-Whenever an update is released, rename `BackUpAnimationListCustom.lua` to `AnimationListCustom.lua`, click yes to overwrite, and you're good to go. 
+Whenever an update is released, rename `BackUpAnimationListCustom.lua` to `AnimationListCustom.lua`, click yes to overwrite, and you're good to go.
 
 It is also a good idea to keep a backup of your config file.
 Below is an example:
@@ -324,13 +423,15 @@ If you want to modify RpEmotes ***(does not apply if you want to use it for pers
 
 
 
-✅ You are allowed to use the custom animations explicitly provided within this repository only 
+✅ You are allowed to use the custom animations explicitly provided within this repository only
 
 ✅ You are allowed to add your own custom animations to this resource and use it on your server. The entire content must remain on your server and not be reuploaded.
 
-❌ You are not allowed to re-distribute the custom animations provided with this repository either on websites, forums, tebex store or discord. 
+❌ You are not allowed to re-distribute the custom animations provided with this repository either on websites, forums, tebex store or discord.
 
 ❌ You are not allowed to claim the custom animations provided within this resource as your own work
+
+❌ You are not allowed to sell this script
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -338,16 +439,16 @@ If you want to modify RpEmotes ***(does not apply if you want to use it for pers
 
 **All** custom animations and props were added with permissions from the creators and does **not** contain any paid or leaked work.
 
-All animation creators have ***specifically*** asked that their content remains free and that the RPEmotes team and community do not try to profit from them, claim them as their own or reupload them anywhere else but TayMcKenzieNZ's GitHub unless express permission has been arranged and granted by their respective creators, therefore you may not extract the animations and / or use them for your own menus. 
+All animation creators have ***specifically*** asked that their content remains free and that the RPEmotes team and community do not try to profit from them, claim them as their own or reupload them anywhere else but TayMcKenzieNZ's GitHub unless express permission has been arranged and granted by their respective creators, therefore you may not extract the animations and / or use them for your own menus.
 
 
-A huge thank  you to the following people for their amazing contributions made to the menu 🫶🏻 : 
+A huge thank  you to the following people for their amazing contributions made to the menu 🫶🏻 :
 
 - Thank you to [Tigerle](https://forum.cfx.re/u/tigerle_studios) for providing the additional code required to make Shared Emotes work to it's full extent
 
 - Thank you to [SMGMissy](https://forum.cfx.re/u/smgmissy/) for assisting with custom pride flags and how to stream them
 
-- Thank you to [MissSnowie](https://www.gta5-mods.com/users/MissySnowie) for the Explicit Usage Rights Agreement to add free custom animations either publicly available or on their discord and for the motivational and overal moral support 
+- Thank you to [MissSnowie](https://www.gta5-mods.com/users/MissySnowie) for the Explicit Usage Rights Agreement to add free custom animations either publicly available or on their discord and for the motivational and overal moral support
 
 - A huge thank you to [Kibook](https://github.com/kibook) for the addition of the Animal Emotes sub menu
 
@@ -365,7 +466,7 @@ A huge thank  you to the following people for their amazing contributions made t
 
 - Thank you to [northsqrd](https://github.com/0sqrd) for adding the search function, Animal Emotes config, mobile phone prop texture variants and general contributions
 
-- Thank you to crusopaul and Eki for discussing KVP and initializing it to the menu for persistent walkstyles 
+- Thank you to crusopaul and Eki for discussing KVP and initializing it to the menu for persistent walkstyles
 
 - Thank you to [Amnilka](https://www.gta5-mods.com/users/frabi) for the Explicit Usage Rights Agreement to add free custom animations either publicly available or on their discord
 
@@ -391,10 +492,18 @@ A huge thank  you to the following people for their amazing contributions made t
 
 - Thanks to [EnchantedBrownie](https://www.gta5-mods.com/users/EnchantedBrownie) for the custom animations
 
+- Thanks to [Copofiscool](https://forum.cfx.re/u/copofiscool/) for adding a toggle to the Favorite Keybinds
+
+- Thank you to [Mads](https://github.com/MadsLeander) for contributing to the menu and adding Exit Emotes
+
+- Thank you to [iSentrie](https://forum.cfx.re/u/isentrie/) for additional code and support
+
+- Thank you to Chocoholic Animations for the custom animations
+
+- Thank you to [CrunchyCat](https://www.gta5-mods.com/users/crunchycat) for the custom animations 
+
 - Thank you to you, the community for being patient, showing love and appreciation, and for providing translations.
 
 You pay a big role in making this script what it is today and we could not do it without you 🙏
 
 -------------------------------------------------------------------------------
-
-<img src="stream/[Custom Emotes]/CMGMods/Permission_CMG_Mods.png" width="480"> <img src="stream/[Custom Emotes]/Prue颜/Permission_Lunyxmods.png" width="480">

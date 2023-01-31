@@ -26,7 +26,7 @@ Config = {
     -- Use a 512 x 128 image!
     -- Note this might cause an issue of the image getting stuck on peoples screens
     CustomMenuEnabled = true,
-    MenuImage = "https://i.imgur.com/Rhl1F9a.png", ----[Custom banner IMGUR or GIPHY URLs go here ]---
+    MenuImage = "https://i.giphy.com/media/kL2WStvEEokt0MioqC/giphy.gif", ----[Custom banner IMGUR or GIPHY URLs go here ]---
     -- You can change the menu image by pasting a link above. It must be the same width and length
     -- You can change the name of the menu here or leave it blank to remove the text in front of the custom banners
     MenuTitle = "",
@@ -63,8 +63,19 @@ Config = {
     HandsupKeybindEnabled = false,
     HandsupKeybind = 'h', -- Get the button string here https://docs.fivem.net/docs/game-references/input-mapper-parameter-ids/keyboard/
     -- You can disable the fingrer pointing here / change the keybind. It is currently set to B
-    PointingKeybindEnabled = false,
+    PointingEnabled = false,
+    PointingKeybindEnabled = true,
     PointingKeybind = 'b', -- Get the button string here https://docs.fivem.net/docs/game-references/input-mapper-parameter-ids/keyboard/
+    -- If crouching should be enabled.
+    CrouchEnabled = true,
+    CrouchKeybindEnabled = true, -- If true, crouching will use keybinds.
+    CrouchKeybind = 'lcontrol', -- The default crouch keybind, get the button string here: https://docs.fivem.net/docs/game-references/input-mapper-parameter-ids/keyboard/
+    CrouchOverride = false, -- If true, you won't enter stealth mode even if the crouch key and the "duck" key are the same.
+    -- If crawling should be enabled.
+    CrawlEnabled = true,
+    CrawlKeybindEnabled = true, -- If true, crawling will use keybinds.
+    CrawlKeybind = 'rcontrol', -- The default crawl keybind, get the button string here: https://docs.fivem.net/docs/game-references/input-mapper-parameter-ids/keyboard/
+    -- Check for updates
 	CheckForUpdates = true,
 }
 

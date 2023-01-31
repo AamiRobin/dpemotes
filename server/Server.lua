@@ -6,17 +6,18 @@ RegisterNetEvent("ServerEmoteRequest", function(target, emotename, etype)
     local ped = GetPlayerPed(source)
 
     if target == -1 then
-      return
-   end
-   local tped = GetPlayerPed(target)
-   local pedcoord = GetEntityCoords(ped)
-   local targetcoord = GetEntityCoords(tped)
+        return
+    end
+    local tped = GetPlayerPed(target)
+    local pedcoord = GetEntityCoords(ped)
+    local targetcoord = GetEntityCoords(tped)
 
-   local distance = #(pedcoord - targetcoord)
+    local distance = #(pedcoord - targetcoord)
 
-   if distance > 3 then
-       return
-   end
+    if distance > 3 then
+        return
+    end
+
     TriggerClientEvent("ClientEmoteRequestReceive", target, emotename, etype)
 end)
 
@@ -24,17 +25,18 @@ RegisterNetEvent("ServerValidEmote", function(target, requestedemote, otheremote
     local ped = GetPlayerPed(source)
 
     if target == -1 then
-      return
-   end
-   local tped = GetPlayerPed(target)
-   local pedcoord = GetEntityCoords(ped)
-   local targetcoord = GetEntityCoords(tped)
+        return
+    end
+    local tped = GetPlayerPed(target)
+    local pedcoord = GetEntityCoords(ped)
+    local targetcoord = GetEntityCoords(tped)
 
-   local distance = #(pedcoord - targetcoord)
+    local distance = #(pedcoord - targetcoord)
 
-   if distance > 3 then
-       return
-   end
+    if distance > 3 then
+        return
+    end
+
     TriggerClientEvent("SyncPlayEmote", source, otheremote, target)
     TriggerClientEvent("SyncPlayEmoteSource", target, requestedemote, source)
 end)
@@ -44,7 +46,7 @@ RegisterNetEvent("ServerEmoteCancel", function(target)
 end)
 
 --#region ptfx
-RegisterNetEvent("rpemotes:ptfx:sync", function(asset, name, offset, rot, scale, color)
+RegisterNetEvent("rpemotes:ptfx:sync", function(asset, name, offset, rot, bone, scale, color)
     if type(asset) ~= "string" or type(name) ~= "string" or type(offset) ~= "vector3" or type(rot) ~= "vector3" then
         print("[rpemotes] ptfx:sync: invalid arguments for source:", source)
         return
@@ -54,6 +56,7 @@ RegisterNetEvent("rpemotes:ptfx:sync", function(asset, name, offset, rot, scale,
     srcPlayerState:set('ptfxName', name, true)
     srcPlayerState:set('ptfxOffset', offset, true)
     srcPlayerState:set('ptfxRot', rot, true)
+    srcPlayerState:set('ptfxBone', bone, true)
     srcPlayerState:set('ptfxScale', scale, true)
     srcPlayerState:set('ptfxColor', color, true)
     srcPlayerState:set('ptfxPropNet', false, true)
@@ -88,7 +91,7 @@ end)
 local function addKeybindEventHandlers()
     RegisterNetEvent("rp:ServerKeybindExist", function()
         local src = source
-        local srcid = GetPlayerIdentifier(source)
+        local srcid = GetPlayerIdentifier(src)
         MySQL.query('SELECT * FROM dpkeybinds WHERE `id`=@id;', { id = srcid }, function(dpkeybinds)
             if dpkeybinds[1] then
                 TriggerClientEvent("rp:ClientKeybindExist", src, true)
@@ -103,7 +106,7 @@ local function addKeybindEventHandlers()
 
     RegisterNetEvent("rp:ServerKeybindCreate", function()
         local src = source
-        local srcid = GetPlayerIdentifier(source)
+        local srcid = GetPlayerIdentifier(src)
         MySQL.insert('INSERT INTO dpkeybinds (`id`, `keybind1`, `emote1`, `keybind2`, `emote2`, `keybind3`, `emote3`, `keybind4`, `emote4`, `keybind5`, `emote5`, `keybind6`, `emote6`) VALUES (@id, @keybind1, @emote1, @keybind2, @emote2, @keybind3, @emote3, @keybind4, @emote4, @keybind5, @emote5, @keybind6, @emote6);'
             ,
             { id = srcid, keybind1 = "num4", emote1 = "", keybind2 = "num5", emote2 = "", keybind3 = "num6", emote3 = "",
@@ -116,7 +119,7 @@ local function addKeybindEventHandlers()
 
     RegisterNetEvent("rp:ServerKeybindGrab", function()
         local src = source
-        local srcid = GetPlayerIdentifier(source)
+        local srcid = GetPlayerIdentifier(src)
         MySQL.query('SELECT keybind1, emote1, keybind2, emote2, keybind3, emote3, keybind4, emote4, keybind5, emote5, keybind6, emote6 FROM `dpkeybinds` WHERE `id` = @id'
             ,
             { ['@id'] = srcid }, function(kb)

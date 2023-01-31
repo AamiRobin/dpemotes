@@ -9,10 +9,9 @@ CustomDP.Walks = {}
 CustomDP.Shared = {}
 CustomDP.Dances = {}
 CustomDP.AnimalEmotes = {}
+CustomDP.Exits = {}
 CustomDP.Emotes = {}
 CustomDP.PropEmotes = {}
-
-
 
 -----------------------------------------------------------------------------------------
 --| I don't think you should change the code below unless you know what you are doing |--
